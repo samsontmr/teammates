@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+
 import teammates.common.datatransfer.CommentAttributes;
 import teammates.common.datatransfer.CommentParticipantType;
 import teammates.common.datatransfer.CommentSendingState;
@@ -44,6 +47,7 @@ public class InstructorStudentCommentEditAction extends Action {
         verifyAccessibleByInstructor(courseId, commentId);
         
         CommentAttributes comment = extractCommentData();
+        String commentPlainText = Jsoup.clean(comment.getCommentText(), Whitelist.none());
         String editType = getRequestParamValue(Const.ParamsNames.COMMENT_EDITTYPE);
         
         try {
@@ -60,7 +64,8 @@ public class InstructorStudentCommentEditAction extends Action {
             } else if ("delete".equals(editType)) {
                 logic.deleteDocument(comment);
                 logic.deleteComment(comment);
-                statusToUser.add(new StatusMessage(Const.StatusMessages.COMMENT_DELETED, StatusMessageColor.SUCCESS));
+                statusToUser.add(new StatusMessage(String.format(Const.StatusMessages.COMMENT_DELETED, commentPlainText),
+                                                   StatusMessageColor.SUCCESS));
                 statusToAdmin = "Deleted Comment for Student:<span class=\"bold\">("
                         + comment.recipients + ")</span> for Course <span class=\"bold\">["
                         + comment.courseId + "]</span><br>"
