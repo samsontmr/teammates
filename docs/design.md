@@ -79,7 +79,6 @@ Package overview:
 + **`logic.backdoor`**: Provides a mechanism for the test driver to access data.
 + **`logic.core`**: Contains the core logic of the system.
 + **`logic.automated`**: Contains the logic of automated tasks.
-+ **`logic.publicresource`**: Contains the logic for retrieving data without the need for authentication.
 
 ###Logic API
 
